@@ -1,0 +1,58 @@
+# Microsoft Endpoint Configuration Manager - MECM
+
+# Below are a few PowerShell scripts that can assist with expediting various administrative tasks. If you'd like to see a specific script added, be sure to message me. 
+
+# 1. Script to Deploy an Application:
+
+# Define variables
+$ApplicationName = "YourApplicationName"
+$CollectionName = "YourCollectionName"
+
+# Get the application
+$Application = Get-CMApplication -Name $ApplicationName
+
+# Get the collection
+$Collection = Get-CMDeviceCollection -Name $CollectionName
+
+# Deploy the application to the collection
+Add-CMDeploymentType -ApplicationName $ApplicationName -DeploymentTypeName "Default" -CollectionName $CollectionName -InstallCommand $Application.InstallCommandLine -ContentLocation $Application.ContentSourcePath
+
+
+# 2. Script to Create a Device Collection:
+
+# Define variables
+$CollectionName = "YourCollectionName"
+$QueryExpression = "select * from SMS_R_System where SMS_R_System.OperatingSystemNameandVersion like '%Workstation%'"
+
+# Create the device collection
+New-CMDeviceCollection -Name $CollectionName -LimitingCollectionName "All Systems" -RefreshType "Manual" -RefreshScheduleType "Monthly" -RefreshScheduleDay 1 -QueryExpression $QueryExpression
+
+
+# 3. Script to Import a Computer into MECM:
+
+# Define variables
+$ComputerName = "ComputerName"
+$MACAddress = "00:00:00:00:00:00"
+
+# Import the computer into MECM
+Import-CMComputerInformation -Name $ComputerName -MacAddress $MACAddress -ImportFromPXE $false -Unblock $true
+
+
+# 4. Script to Create a Software Update Group:
+
+# Define variables
+$SoftwareUpdateGroupName = "YourSoftwareUpdateGroupName"
+$SoftwareUpdateIDs = @("YourSoftwareUpdateID1", "YourSoftwareUpdateID2")
+
+# Create the software update group
+New-CMSoftwareUpdateGroup -Name $SoftwareUpdateGroupName -SoftwareUpdateId $SoftwareUpdateIDs -Description "Your description here"
+
+
+# 5. Script to Start a Software Update Deployment:
+
+# Define variables
+$SoftwareUpdateGroupName = "YourSoftwareUpdateGroupName"
+$SoftwareUpdateIDs = @("YourSoftwareUpdateID1", "YourSoftwareUpdateID2")
+
+# Create the software update group
+New-CMSoftwareUpdateGroup -Name $SoftwareUpdateGroupName -SoftwareUpdateId $SoftwareUpdateIDs -Description "Your description here"
